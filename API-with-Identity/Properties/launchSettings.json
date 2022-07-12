@@ -16,7 +16,8 @@
         "ISSUER": "localhost",
         "ASPNETCORE_ENVIRONMENT": "Development",
         "AUDIENCE": "localhost",
-        "TOKEN_SECRET": "SECRET14SECRET14"
+        "TOKEN_SECRET": "SECRET14SECRET14",
+        "DB_CONNECTION": "Host=localhost:5432;Username=postgres;Password=admin;Database=asp_auth"
       },
       "applicationUrl": "https://localhost:7221;http://localhost:5221",
       "dotnetRunMessages": true

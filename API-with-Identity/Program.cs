@@ -26,7 +26,7 @@ builder.Services.AddSwaggerGen(options =>
     )
 );
 
-builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql("Host=localhost:5432;Username=postgres;Password=admin;Database=asp_auth"));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration["DB_CONNECTION"]));
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 
