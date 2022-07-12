@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +21,7 @@ builder.Services.AddSwaggerGen(options => {
        new OpenApiInfo {
            Version = "v1",
            Title = " ASP.NET Core Auth API",
-           Description = "Add JWT authentication and role based authorization with ASP.NET Core Identity.Default user: username: admin, password: admin",
+           Description = "JWT authentication and role based authorization with ASP.NET Core Identity.Default user: username: admin, password: admin",
            Contact = new OpenApiContact { Name = "My web", Url = new Uri("https://mateoledesma.vercel.app") },
        }
     );
@@ -32,6 +33,7 @@ builder.Services.AddSwaggerGen(options => {
         BearerFormat = "JWT",
         Scheme = "Bearer"
     });
+    
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -46,6 +48,8 @@ builder.Services.AddSwaggerGen(options => {
             new string[]{}
         }
     });
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration["DB_CONNECTION"]));
