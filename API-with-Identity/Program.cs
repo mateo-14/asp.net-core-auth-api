@@ -15,16 +15,38 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
+builder.Services.AddSwaggerGen(options => {
     options.SwaggerDoc("v1",
-        new OpenApiInfo {
-            Version = "v1",
-            Title = " ASP.NET Core Auth API",
-            Description = "Add JWT authentication and role based authorization with ASP.NET Core Identity.",
-            Contact = new OpenApiContact { Name = "My web", Url = new Uri("https://mateoledesma.vercel.app") },
+       new OpenApiInfo {
+           Version = "v1",
+           Title = " ASP.NET Core Auth API",
+           Description = "Add JWT authentication and role based authorization with ASP.NET Core Identity.Default user: username: admin, password: admin",
+           Contact = new OpenApiContact { Name = "My web", Url = new Uri("https://mateoledesma.vercel.app") },
+       }
+    );
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
+        In = ParameterLocation.Header,
+        Description = "Please enter a valid token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            new string[]{}
         }
-    )
-);
+    });
+});
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration["DB_CONNECTION"]));
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
